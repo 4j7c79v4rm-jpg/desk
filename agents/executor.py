@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 
 from links import coin_url
 import fees
+import telegram
 
 
 async def run(bus, conn, settings: dict):
@@ -50,6 +51,9 @@ async def _size_and_signal(analyst_msg: dict, bus, conn, settings: dict):
 
     print(f"Executor: SIGNAL {mint[:8]} size=${size:.2f} mode={mode}")
     print(f"  link: {link}")
+
+    text = f"PAPER · Buy {mint[:6]}… · ${size:.2f}"
+    await telegram.send(text, button_url=link, button_label="Buy on FOMO")
 
     await bus.put(
         bus.executor_to_risk,
